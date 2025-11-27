@@ -1,0 +1,20 @@
+---
+- name: Configure firewall on Ubuntu
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure UFW is installed
+      apt:
+        name: ufw
+        state: present
+        update_cache: yes
+
+    - name: Allow SSH so we don't lock ourselves out
+      command: ufw allow 22/tcp
+
+    - name: Enable UFW if it is not already enabled
+      command: ufw --force enable
+
+    - name: Block incoming traffic on port 8080
+      command: ufw deny 8080/tcp
