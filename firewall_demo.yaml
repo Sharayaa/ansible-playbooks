@@ -1,17 +1,3 @@
-# ============================
-# INVENTORY SECTION
-# ============================
-all:
-  hosts:
-    ubuntu_vm:
-      ansible_host: 54.183.144.212
-      ansible_user: ubuntu
-      ansible_ssh_private_key_file: ~/.ssh/id_rsa
-
----
-# ============================
-# PLAYBOOK SECTION
-# ============================
 - name: Block port 8080 on Ubuntu VM
   hosts: all
   become: yes
