@@ -1,3 +1,6 @@
+# Installed Ansible version on the node:
+# ansible [core 2.16.3]
+
 - name: Block port 8080 on Ubuntu VM
   hosts: all
   become: yes
