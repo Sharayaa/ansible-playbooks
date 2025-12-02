@@ -2,26 +2,15 @@
 # Installed Ansible version on the node:
 # ansible [core 2.16.3]
 
-- name: Configure firewall on Ubuntu
-  hosts: demo
+---
+- name: Block port 8080 on Ubuntu
+  hosts: all
   become: yes
-
-  vars:
-    ansible_user: ubuntu
-    ansible_host: 54.67.6.45
-    ansible_ssh_private_key_file: /home/ubuntu/.ssh/id_rsa
-    ansible_connection: ssh
-
   tasks:
-    - name: Reset UFW rules to clean state
-      ansible.builtin.command: ufw --force reset
-
-    - name: Allow SSH on port 22
-      ansible.builtin.command: ufw allow 22/tcp
-
-    - name: Deny HTTP traffic on port 8080
+    - name: Deny port 8080
       ansible.builtin.command: ufw deny 8080/tcp
 
-    - name: Enable firewall
+    - name: Enable UFW
       ansible.builtin.command: ufw --force enable
+
 
