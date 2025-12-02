@@ -1,9 +1,9 @@
 # Installed Ansible version on the node:
 # ansible [core 2.16.3]
 
-- name: Block port 8080 on Ubuntu VM
+- name: Block port 8080 on Ubuntu VM using UFW
   hosts: all
-  become: yes
+  become: true
 
   tasks:
     - name: Ensure UFW is installed
@@ -12,12 +12,18 @@
         state: present
         update_cache: yes
 
-    - name: Enable UFW
-      community.general.ufw:
-        state: enabled
+    - name: Ensure SSH (22/tcp) remains allowed
+      ansible.builtin.command: ufw allow 22/tcp
+      register: ufw_allow_22
+      changed_when: "'Skipping' not in ufw_allow_22.stdout"
 
-    - name: Block port 8080
-      community.general.ufw:
-        rule: deny
-        port: 8080
-        proto: tcp
+    - name: Deny incoming traffic on port 8080/tcp
+      ansible.builtin.command: ufw deny 8080/tcp
+      register: ufw_deny_8080
+      changed_when: "'Skipping' not in ufw_deny_8080.stdout"
+
+    - name: Enable UFW (non-interactive)
+      ansible.builtin.command: ufw --force enable
+      register: ufw_enable
+      changed_when: "'already enabled' not in ufw_enable.stdout"
+
