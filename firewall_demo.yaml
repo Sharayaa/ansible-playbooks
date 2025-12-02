@@ -4,7 +4,7 @@
 all:
   hosts:
     ubuntu_vm:
-      ansible_host: 13.57.10.68
+      ansible_host: 54.183.144.212
       ansible_user: ubuntu
       ansible_ssh_private_key_file: ~/.ssh/id_rsa
 
