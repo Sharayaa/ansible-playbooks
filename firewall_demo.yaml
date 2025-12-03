@@ -7,16 +7,13 @@
   become: yes
 
   tasks:
-    - name: Keep SSH open
+    - name: Reset UFW to a clean state
+      ansible.builtin.command: ufw --force reset
+
+    - name: Allow SSH on port 22
       ansible.builtin.command: ufw allow 22/tcp
 
-    - name: Remove allow rule for 8080 (non-interactive)
-      ansible.builtin.command: ufw --force delete allow 8080/tcp
-      register: del_rule
-      failed_when: del_rule.rc not in [0, 1]
-      changed_when: del_rule.rc == 0
-
-    - name: Deny port 8080
+    - name: Deny HTTP on port 8080
       ansible.builtin.command: ufw deny 8080/tcp
 
     - name: Enable UFW
@@ -26,9 +23,10 @@
       ansible.builtin.command: ufw status numbered
       register: ufw_status
 
-    - name: Print UFW status in output
+    - name: Print UFW status
       ansible.builtin.debug:
         var: ufw_status.stdout_lines
+
 
 
 
